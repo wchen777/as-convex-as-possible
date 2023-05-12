@@ -24,3 +24,7 @@ We implemented approximate convex decomposition for triangle meshes using greedy
 | Bean                | Cactus              |
 | :----------------- | :----------------- |
 | ![bean](images/bean_fall.gif) | ![cactus](images/cactus_moving.gif) |
+
+| Teapot + Wrecking Ball                | 
+| :----------------- | 
+| ![teapot](images/ritchie_teapot.gif) | 
