@@ -8,3 +8,19 @@ We implemented approximate convex decomposition for triangle meshes using greedy
 
 
 ## Results
+
+### Stills
+
+| Bunny                | Armadillo              |
+| :----------------- | :----------------- |
+| ![bunny_still](images/bunny_still.png) | ![armadillo still](images/armadillo_still.png) |
+
+### GIFs
+
+| Bunny                | Armadillo              |
+| :----------------- | :----------------- |
+| ![bunny](images/bunny_fall.gif) | ![armadillo](images/armadillo_fall.gif) |
+
+| Bean                | Cactus              |
+| :----------------- | :----------------- |
+| ![bean](images/bean_fall.gif) | ![cactus](images/cactus_moving.gif) |
