@@ -81,7 +81,7 @@ struct TreeNode {
         parent = _parent;           // set parent
 
         prev_cut_plane = p;
-        // TODO: initialize candidate_planes. can pass in the same one each time and reshuffle
+        // initialize candidate_planes. can pass in the same one each time and reshuffle
         candidate_planes = c_star->get_axis_aligned_planes(NUM_CUTTING_PLANES);
 
         // shuffle it for randomness
