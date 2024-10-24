@@ -49,9 +49,8 @@ std::pair<shared_ptr<Mesh>, shared_ptr<Mesh>> MCTS::MCTS_search(Mesh& cur_mesh) 
         }
     }
 
-    // TODO: destroy the tree
-    //    root->free_children();
-    //    delete root;
+    root->free_children();
+    delete root;
 
     // assertion that meshes exist
     if (!cut_l || !cut_r) return {nullptr, nullptr};
@@ -61,8 +60,8 @@ std::pair<shared_ptr<Mesh>, shared_ptr<Mesh>> MCTS::MCTS_search(Mesh& cur_mesh) 
 }
 
 std::pair<shared_ptr<TreeNode>, double> MCTS::tree_policy(shared_ptr<TreeNode> v, int max_depth) {
-    // selected cutting planes
-    //    std::vector<Plane> S;
+    // selected cutting planes (for debugging)
+    // std::vector<Plane> S;
     std::cout << "tree policy on " << v << std::endl;
 
     shared_ptr<TreeNode> curr_v = v;
@@ -90,7 +89,7 @@ std::pair<shared_ptr<TreeNode>, double> MCTS::tree_policy(shared_ptr<TreeNode> v
             total_concavity += -curr_v->concavity_max;
 
             // add corresponding plane of curr_v to selected cutting planes
-            //            S.push_back(curr_v->prev_cut_plane);
+            // S.push_back(curr_v->prev_cut_plane);
         } else {
             // randomly select a untried cutting plane P of c_star
             Plane untried_plane = curr_v->sample_next_candidate();
@@ -101,7 +100,7 @@ std::pair<shared_ptr<TreeNode>, double> MCTS::tree_policy(shared_ptr<TreeNode> v
             // ignore cuts that result in more than 2 pieces
             if (components.size() == 2) {
                 // add the cutting plane P to selected cutting planes
-                //                S.push_back(untried_plane);
+                // S.push_back(untried_plane);
 
                 // create new node v_prime to curr_v
 
@@ -169,7 +168,6 @@ double MCTS::default_policy(shared_ptr<TreeNode> v, int max_depth) {
         // for direction in {xy, xz, yz}
         std::vector<Plane> directions = c_star->get_axis_aligned_planes(NUM_CUTTING_PLANES);
         for (Plane& direction : directions) {
-            //            std::cout << "trying to cut in direction" << std::endl;
             std::vector<Mesh> cut = c_star->cut_plane(direction);
 
             // only care if cut resulted in 2 pieces
@@ -190,25 +188,21 @@ double MCTS::default_policy(shared_ptr<TreeNode> v, int max_depth) {
                 }
             }
         }
-
-        //        std::cout << "default after direction search" << std::endl;
+        
         if (best_results.size() == 0) {
             break;
         }
 
         // at this point, have best cut pieces and plane
         C_copy.erase(it->first);  // erase c_star
-                                  //        std::cout << "after erase" << std::endl;
 
         // insert new pieces into queue
-        // TODO: shared pointers here
+        // TODO: maybe shared pointers here?
         C_copy[c_m0] = make_shared<Mesh>(best_results[0]);
         C_copy[c_m1] = make_shared<Mesh>(best_results[1]);
 
-        //        std::cout << "after new meshes" << std::endl;
-
         // add P to the selected set
-        //                                S.push_back(best_direction);
+        // S.push_back(best_direction);
 
         // accumulate total concavity
         total_concavity += q_max;
@@ -251,13 +245,13 @@ map<double, Mesh> MCTS::greedy_search(const Mesh& cur_mesh) {
         // Get all concave edges of the worst shape, sorted from furthest to closest distance to CH
         vector<EdgeIndices> concave_edge_indices = worst_mesh.get_concave_edges();
         append_to_file(OUT_EDGE_FILE, concave_edge_indices.size());
-        cout << "num concave edges: " << concave_edge_indices.size() << endl;
+        // cout << "num concave edges: " << concave_edge_indices.size() << endl;
 
         // if no concave edges, we're done
-        //        if (concave_edge_indices.empty()) {
-        //            cout << "worst mesh is convex!\n";
-        //            break;
-        //        }
+        if (concave_edge_indices.empty()) {
+            cout << "worst mesh is convex!\n";
+            break;
+        }
 
         // Sort by furthest distance from CH
         deque<EdgeIndices> sorted_concave_edge_indices =
