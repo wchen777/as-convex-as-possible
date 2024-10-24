@@ -132,13 +132,13 @@ struct TreeNode {
         cut_r = m1;
     }
 
-    // TODO: destroy this node's children recursively
-    //    void free_children() {
-    //        for (std::shared_ptr<TreeNode> ch : child_cuts) {
-    //            ch->free_children();
-    //            delete ch;
-    //        }
-    //    }
+    // destroy this node's children recursively
+    void free_children() {
+        for (std::shared_ptr<TreeNode> ch : child_cuts) {
+            ch->free_children();
+            delete ch;
+        }
+    }
 };
 
 class MCTS {
